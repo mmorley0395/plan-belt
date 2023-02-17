@@ -4,6 +4,7 @@ channels:
 dependencies:
   - black
   - pandas
+  - requests
   - sqlalchemy
   - psycopg2
   - openpyxl
