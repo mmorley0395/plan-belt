@@ -1,0 +1,16 @@
+name: planbelt 
+channels:
+  - conda-forge
+dependencies:
+  - black
+  - pandas
+  - sqlalchemy
+  - psycopg2
+  - openpyxl
+  - ipykernel
+  - geoalchemy2
+  - python-dotenv
+  - pip
+  - pip:
+      - git+https://github.com/mmorley0395/pg-data-etl
+prefix: /home/mmorley0395/miniconda3/envs/planbelt
