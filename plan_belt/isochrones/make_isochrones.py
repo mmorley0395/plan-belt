@@ -3,10 +3,16 @@ from pg_data_etl import Database
 db = Database.from_config("lts", "localhost")
 
 
-def generate_topology(network_table:str, where_statement:str, unique_id_field:str, target_table:str, srid:int=26918, hour_distance:float=16000, topology_threshold:float=0.0005, ):
-
+def generate_topology(
+    network_table: str,
+    where_statement: str,
+    unique_id_field: str,
+    target_table: str,
+    srid: int = 26918,
+    hour_distance: float = 16000,
+    topology_threshold: float = 0.0005,
+):
     db.execute(
-            
         f"""drop table if exists {target_table} CASCADE;
             create table {target_table} as select * from {network_table} a where {where_statement};
             alter table {target_table} add column source integer;
@@ -29,12 +35,14 @@ def generate_topology(network_table:str, where_statement:str, unique_id_field:st
             alter table {target_table} add column traveltime_min double precision;
             update {target_table} set traveltime_min = length_m  / 16000.0 * 60; -- 16 kms per hr, about 10 mph. low range of beginner cyclist speeds
 """
- 
-    def __create_isochrone(self, travel_time:int=15):
+    )
+
+    def __create_isochrone(self, travel_time: int = 15):
         """
         Creates isochrone based on study_segment
         """
-        db.execute(f"""
+        db.execute(
+            f"""
         drop materialized view if exists isochrone;
         create materialized view isochrone as 
             with nodes as (
@@ -51,6 +59,5 @@ def generate_topology(network_table:str, where_statement:str, unique_id_field:st
              select 1 as uid, st_concavehull(st_union(b.geom), .8) as geom from nodes a
              inner join lts2gaps b 
              on a.id = b."source" 
-                   """)
-
-
+                   """
+        )
